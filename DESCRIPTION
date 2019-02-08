@@ -1,0 +1,9 @@
+Package: nearestNeighbors
+Type: Package
+Title: nearest neighbors screencasts
+Version: 2019.02.08
+Author: Van William Steinbrenner
+Maintainer: Van William Steinbrenner <vws2@nau.edu>
+Description: demo code from Dr. Toby Dylan Hocking screencasts
+License: GPL-3
+LinkingTo: RcppEigen
