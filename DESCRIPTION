@@ -7,4 +7,4 @@ Maintainer: Van William Steinbrenner <vws2@nau.edu>
 Description: demo code from Dr. Toby Dylan Hocking screencasts
 License: GPL-3
 LinkingTo: RcppEigen
-Suggests: ElemStatLearn
+Suggests: ElemStatLearn, testthat
