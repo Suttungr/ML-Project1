@@ -1,4 +1,6 @@
 #include <Eigen/Dense>
+#include<iostream>
+#include "ErrorCodes.h"
 
 int NN1toKmaxPredict(
     const int n_train_observations, const int n_test_observations, const int n_features, const int max_neighbors, 
@@ -8,6 +10,21 @@ int NN1toKmaxPredict(
     const double *train_labels_ptr,  //n_observations (vector)
     double *test_predictions_ptr //n_test_observations x max_neighbors
 ) {
+  
+  if(max_neighbors <= 0){
+    
+    std::cout << K_NOT_POSITIVE_ERROR << std::endl;
+    return EXIT_FAILURE;
+  }
+  
+  if(n_train_observations <= 0 ||
+     n_test_observations <= 0 ||
+     n_features <= 0){
+    
+    std:: cout << DIMENSIONS_NOT_POSITIVE_ERROR << std::endl;
+    return EXIT_FAILURE;
+  }
+  
   Eigen::Map< Eigen::MatrixXd > train_inputs_mat(
       (double*)train_inputs_ptr, n_train_observations, n_features);
   
