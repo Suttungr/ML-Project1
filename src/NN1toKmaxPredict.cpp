@@ -26,12 +26,22 @@ int NN1toKmaxPredict(
   
   Eigen::VectorXi sorted_index_vec(n_train_observations);
   
+  // Finding the distance
   for(int i = 0; i < n_train_observations; i++){
-    diff_vec = train_inputs_mat.row(i).transpose() - test_inputs_vec;
-    dist_vec(i) = diff_vec.norm();
-    sorted_index_vec(i)=i;
+    
+    // Distance for L1 Manhattan
+    diff_vec = test_inputs_vec - train_inputs_mat.row(i).transpose();
+    dist_vec(i) = diff_vec.sum();
+    sorted_index_vec(i) = i;
+    
+    /*// Distance for L2 Norm
+     * diff_vec = train_inputs_mat.row(i).transpose() - test_inputs_vec;
+     * dist_vec(i) = diff_vec.norm();
+     * sorted_index_vec(i)=i;
+     */
   }
   
+  // Sorting while keeping track of indexes
   std::sort(
     sorted_index_vec.data(),
     sorted_index_vec.data()+sorted_index_vec.size(),
@@ -42,8 +52,9 @@ int NN1toKmaxPredict(
 
   //std::cout << sorted_index_vec << std::endl<<std::end1;
 
+  // Grabbing the first nearest neighbors and find their mean (regression)
+  // For classification return the mode of the labels
   double total_labels = 0.0;
-
   for(int k = 0; k < max_neighbors; k++)
   {
     int row = sorted_index_vec(k);
