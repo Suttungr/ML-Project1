@@ -38,11 +38,19 @@ NNLearnCV <- function(X.mat, y.vec, max.neighbors=30, fold.vec=NULL, n.folds=5) 
   # If fold.vec is NULL, randomly assign fold IDs from 1 to n.folds 
   
   if(fold.vec == is.null) {
-    fold.vec <- sample(1:n.folds, n.folds)
+    fold.vec <- sample(rep(1:n.folds, l=nrow(X.mat)))
   }
     
   # make sure that fold.vec is the same size as y.vec, which is the 
-  # same as the number of rows in X.mat). Use stop() with an informative error message  
+  # same as the number of rows in X.mat). Use stop() with an informative error message
+  
+  if(nrow(X.mat) != length(y.vec)) {
+    stop("ERROR: The number of rows in X.mat is not the same as the size of y.vec")
+  }
+  
+  if(length(fold.vec) != length(y.vec)) {
+    stop("ERROR: the size of fold.vec IS NOT equivalent to the size of y.vec")
+  }
   
   # then perform cross-validation to compute two matrices of mean loss values, 
   # (max.neighbors rows x n.folds columns), one for the train sets (train.loss.mat), 
