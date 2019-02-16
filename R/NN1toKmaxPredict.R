@@ -3,18 +3,18 @@
 #' An R function that wraps C++ code
 #'
 #' @param X.mat numeric input feature matrix [n x p]
-#' @param y.vec numeric train label vector [n], either all 0/1 for binary class., or other real numbers for regression (multi-class classification not supported)
-#' @param testX.vec numeric test feature vector [p]
+#' @param testX.mat numeric test feature matrix [m x p]
+#' @param y.mat numeric train label vector [n], either all 0/1 for binary class., or other real numbers for regression (multi-class classification not supported)
 #' @param max.neighbors scalar integer, max number of neighbors
 #'
-#' @return numeric vector of size max.neighbors, predictions from 1 to max
+#' @return numeric matrix of size [m x max]
 #' @export
 #'
 #' @examples
-knn <- function(X.mat, y.vec, testX.vec, max.neighbors){
-  result.list <- .C("knn_interface", as.double(X.mat), as.double(y.vec), as.double(testX.vec), as.integer(nrow(X.mat)), 
+NN1toKmaxPredict <- function(X.mat, testX.mat, y.vec, max.neighbors){
+  result.list <- .C("NN1toKmaxPredict_interface", as.double(X.mat), as.double(testX.mat), as.double(y.mat), as.integer(nrow(X.mat)), as.integer(nrow(testX.mat)), 
                     as.integer(ncol(X.mat)), as.integer(max.neighbors), predictions=double(max.neighbors), 
-                    PACKAGE=nearestNeighbors)
+                    PACKAGE=nearestNeighbors) #predictions still needs updated to matrix form
   result.list$predictions
 }
 
