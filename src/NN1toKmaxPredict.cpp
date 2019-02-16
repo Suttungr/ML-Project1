@@ -26,11 +26,11 @@ int NN1toKmaxPredict(
   Eigen::Map< Eigen::MatrixXd > train_inputs_mat(
       (double*)train_inputs_ptr, n_train_observations, n_features);
   
-  Eigen::Map<Eigen::VectorXd> test_inputs_vec(
-    (double*) test_inputs_ptr, n_features);
+  //Eigen::Map<Eigen::VectorXd> test_inputs_vec(
+   // (double*) test_inputs_ptr, n_features);
   
-  //Eigen::Map< Eigen::MatrixXd > test_inputs_mat(
-    //  (double*) test_inputs_ptr, n_test_observations, n_features);
+  Eigen::Map< Eigen::MatrixXd > test_inputs_mat(
+      (double*) test_inputs_ptr, n_test_observations, n_features);
   
   Eigen::Map<Eigen::VectorXd> train_labels_vec(
     (double*) train_labels_ptr, n_train_observations);
@@ -49,9 +49,13 @@ int NN1toKmaxPredict(
     for(int i = 0; i < n_train_observations; i++){
       
       // Distance for L1 Manhattan
-      diff_vec = test_inputs_vec - train_inputs_mat.row(i).transpose();
+      diff_vec = test_inputs_mat.row(j) - train_inputs_mat.row(i);
       dist_mat.row(i)[j] = diff_vec.sum();
-      sorted_index_vec(i+j) = i+j; // Assuming that matrixes can be called by ascending index, row -> col
+      
+      // Finds the appropriate horizontal index to use a 1D vector in 2D
+      int row_index = i * n_train_observations;
+      
+      sorted_index_vec(row_index + j) = row_index + j;
     }
   }
   
@@ -65,21 +69,22 @@ int NN1toKmaxPredict(
       return dist_mat(left) < dist_mat(right);
     });
   
-
-  //std::cout << sorted_index_vec << std::endl<<std::end1;
-
+  
   // For classification return the mode of the labels, for regression return the mean
   // For each set of test data, add a row to the matrix.  For each of those rows, for each k, compute the mean||mode
     for(int i = 0; i < n_test_observations; i++){
       
-    double total_labels = 0.0;
+    // Finds the appropriate horizontal index to use a 1D vector in 2D
+    int row_index = i * n_test_observations;
+    
+    double total_labels = 0.0; // Reset the total for each row (each testing set)
     
     // For each set of test data
     for(int k = 0; k < max_neighbors; k++){
       
       int neighbors = k + 1;
       total_labels += dist_mat.row(i)[k];
-      test_predictions_ptr[i+k] = total_labels/neighbors;
+      test_predictions_ptr[row_index + k] = total_labels/neighbors;
     }
   }
 
