@@ -56,8 +56,12 @@ NNLearnCV <- function(X.mat, y.vec, max.neighbors=30, fold.vec=NULL, n.folds=5) 
   # (max.neighbors rows x n.folds columns), one for the train sets (train.loss.mat), 
   # one for the validation sets (validation.loss.mat).
   
+  # TODO
+  
   # If the labels (y.vec) are all in {0,1} then the loss function should 
   # be the 01-loss (binary classification), otherwise use the square loss (regression).
+  
+  # TODO
   
   for(fold.i in seq_along(unique.folds)){
     for(prediction.set.name in c("train", "validation")){
