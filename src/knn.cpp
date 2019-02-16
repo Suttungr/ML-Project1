@@ -33,8 +33,8 @@ int knn(
   double total = 0.0;
   for (int model_i = 0; model_i < max_neighbors; model_i++) {
     int neighbors = model_i + 1;
-    int row_i = sorted_index_vec(model_i);
-    total += train_label_ptr[row_i];
+    int nrw = sorted_index_vec(model_i);
+    total += train_label_ptr[nrw];  // Originally row_i, threw error
     
     test_predictions_ptr[model_i] = total / neighbors;
   }
